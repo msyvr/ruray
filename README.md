@@ -3,6 +3,16 @@
 ## Project objective
 Basically, exercise my new Rust skills. Suggestions re making the code more idiomatic and performant are most welcome.
 
+### Goal 0
+Write a slice of directly-computed pixels to an image format. No scene, just set up the render capability.
+```rust
+let r = (0.1 + ((col as f32) * 0.9 / (display.0 as f32 - 1.0))) as f32;
+let g = 0.5;
+let b = (0.1 + ((row as f32) * 0.9 / (display.1 as f32 - 1.0))) as f32;
+```
+
+!["color gradient, no scene"](/static/color_gradient.webp)
+
 ### Goal 1
 Generate a photo-realistic image of a configured scene. 
 - Start by defining a `world` which includes both a `scene` (with lighting) and a `display` and a 'camera' `viewpoint`. 

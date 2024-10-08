@@ -1,3 +1,5 @@
+use std::env;
+use std::io;
 use image;
 use std::fs::File;
 use std::path::Path;
@@ -9,8 +11,12 @@ fn write_to_file(
     img_size:(usize, usize),
 ) -> Result<(), std::io::Error> {
 
+    // The docs indicate that webp isn't a valid format for
+    // image::save_buffer but using it produces a webp file
+    // so the docs seem to be out of date.
     let format_ok = match img_format {
-        "jpeg" 
+        "webp"
+        | "jpeg" 
         | "png" 
         | "ico" 
         | "pnm" 
@@ -21,11 +27,8 @@ fn write_to_file(
 
     };
 
-    // TODO Improve error handling of unsupported formats. 
-    // Although... as it happens, not introducing a panic enabled
-    // serendipitous discovery of webp being supported by save_buffer!
     if !format_ok {
-        println!("Unsupported image format. Expect an error for image::save_buffer.")
+        panic!("unsupported image format")
     } 
 
     let filename = [img_filename, ".", img_format].concat();
@@ -83,7 +86,54 @@ mod test {
     
 }
 
+fn render(pixels: &mut [u8], display: (usize, usize)) {
+    for row in 0..display.1 {
+        for col in 0..display.0 {
+            let r = (0.1 + ((col as f32) * 0.9 / (display.0 as f32 - 1.0))) as f32;
+            let g = 0.5;
+            let b = (0.1 + ((row as f32) * 0.9 / (display.1 as f32 - 1.0))) as f32;
+
+            // current pixel index: advance to row, advance to col (nb 3 vals per pixel)
+            let index_red = (( row * display.0 ) + col) * 3;
+
+            // TODO use palette crate or similar to avoid fudging the values with ~256 as f32
+            pixels[index_red] = (r * 255.9999) as u8;
+            pixels[index_red + 1] = (g * 255.9999) as u8;
+            pixels[index_red + 2] = (b * 255.9999) as u8;
+        }
+    }
+}
+
 fn main() {
-    println!("Hello, world! Welcome to ruray - my rust ray tracer.");
+    println!("Let's trace some rays in Rust...\n");
+
+    let mut env_args: Vec<String> = env::args().collect();
+    if env_args.len() < 2 {
+        println!("Enter a target filename: ");
+        let mut target = String::new();
+        io::stdin().read_line(&mut target).expect("Utf-8 encoded input");
+        target.pop();
+        env_args.push(target);
+    }
+
+    println!("env args: {:?}", env_args);
+    let path = ["static", "/", &env_args[1]].concat();
+    println!("path: {}", path);
+
+    let format_default = "webp";
+
+    // Usually, 'width' and 'height' are used, but they don't convey _units_.
+    // Will use 'columns' and 'rows' to avoid ambiguity.
+    let display_columns: usize = 4 * 50 * 3;
+    let display_rows: usize = 3 * display_columns / 4;
+    println!("display: {:?} cols, {:?} rows", display_columns, display_rows);
+
+    let display = (display_columns, display_rows);
+    println!("display dim tuple: {:?}", display);
+    
+    let mut pixels = vec![0; 3 * display_columns * display_rows];
+    render(&mut pixels, display);
+
+    write_to_file(&path, format_default, &pixels, display).expect("image write should succeed");
 
 }
