@@ -46,12 +46,11 @@ fn write_to_file(
 }
 
 #[cfg(test)]
-
 mod test {
     use super::*;
 
     #[test]
-    fn writes_single_pixel_to_new_image_file(){
+    fn writes_to_png(){
         let img_filename = "static/single_pixel";
         let img_format = "png";
         let img_pixels: [u8; 3] = [100, 10, 200];
@@ -64,10 +63,11 @@ mod test {
         );
 
         assert!(result.is_ok());
+        // single pixel as png: 72 bytes
     }
 
     #[test]
-    fn saves_as_webp(){
+    fn writes_to_webp(){
         let img_filename = "static/wrong_format";
         let img_format = "webp";
         let img_pixels: [u8; 3] = [100, 10, 200];
@@ -80,10 +80,8 @@ mod test {
         );
 
         assert!(result.is_ok());
-        // Ummm - this seems to work, contrary to the docs?
-        // Oh, and check it out! png 72 bytes, webp 36 bytes. Whoa!
+        // single pixel as webp: 36 bytes
     }    
-    
 }
 
 fn render(pixels: &mut [u8], display: (usize, usize)) {
@@ -122,9 +120,9 @@ fn main() {
 
     let format_default = "webp";
 
-    // Usually, 'width' and 'height' are used, but they don't convey _units_.
-    // Will use 'columns' and 'rows' to avoid ambiguity.
-    let display_columns: usize = 4 * 50 * 3;
+    // Width as 'columns', height as 'rows'.
+    let common = 50;
+    let display_columns: usize = 4 * common * 3;
     let display_rows: usize = 3 * display_columns / 4;
     println!("display: {:?} cols, {:?} rows", display_columns, display_rows);
 
