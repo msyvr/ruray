@@ -1,6 +1,11 @@
 ## &#x1F386; a ray tracer written in rust &#x1F386;
 
-### Project objective
+### Usage
+```bash
+cargo run -- image-file-name-no-format
+```
+
+## Project objective
 Build a basic ray tracing engine to exercise my new Rust skills. Suggestions re making the code more idiomatic and performant are most welcome.
 
 #### Goal 0

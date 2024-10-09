@@ -2,17 +2,17 @@ use rand::Rng;
 use std::f64;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 
-pub struct Point {
+pub struct Vec3 {
     x: f64,
     y: f64,
     z: f64,
 }
 
-impl Point {
+impl Vec3 {
 
     // New, at specific coordinates.
-    pub fn new(x: f64, y: f64, z: f64) -> Point {
-        Point { 
+    pub fn new(x: f64, y: f64, z: f64) -> Vec3 {
+        Vec3 { 
             x, 
             y, 
             z,
@@ -21,9 +21,9 @@ impl Point {
 
     // New, at random coordinates within the world/scene.
     
-    pub fn new_random(world_min: f64, world_max: f64) -> Point {
+    pub fn new_random(world_min: f64, world_max: f64) -> Vec3 {
         let mut rng = rand::thread_rng();
-        Point::new(
+        Vec3::new(
             rng.gen_range(world_min..world_max),
             rng.gen_range(world_min..world_max),
             rng.gen_range(world_min..world_max),
@@ -46,12 +46,12 @@ impl Point {
 
     // Ray approximation: ray === straight line between two points. 
 
-    pub fn dot(&self, other: &Point) -> f64 {
+    pub fn dot(&self, other: &Vec3) -> f64 {
         (self.x * other.x) + (self.y * other.y) + (self.z * other.z)
     }
 
-    pub fn cross(&self, other: &Point) -> Point {
-        Point::new(
+    pub fn cross(&self, other: &Vec3) -> Vec3 {
+        Vec3::new(
             self.y * other.z - self.z * other.y,
             self.z * other.x - self.x * other.z,
             self.x * other.y - self.y * other.x,
@@ -63,17 +63,17 @@ impl Point {
         self.dot(&self).sqrt()
     }
 
-    pub fn distance(&self, other: &Point) -> f64 {
+    pub fn distance(&self, other: &Vec3) -> f64 {
         ((self.x - other.x).powf(2.0) + (self.y - other.y).powf(2.0) + (self.z - other.z).powf(2.0)).sqrt()
     }
 
 }
 
-impl Add for Point {
-    type Output = Point;
+impl Add for Vec3 {
+    type Output = Vec3;
 
-    fn add(self, other: Point) -> Point {
-        Point {
+    fn add(self, other: Vec3) -> Vec3 {
+        Vec3 {
             x: self.x + other.x(),
             y: self.y + other.y(),
             z: self.z + other.z(),
@@ -81,11 +81,11 @@ impl Add for Point {
     }
 }
 
-impl Sub for Point {
-    type Output = Point;
+impl Sub for Vec3 {
+    type Output = Vec3;
 
-    fn sub(self, other: Point) -> Point {
-        Point {
+    fn sub(self, other: Vec3) -> Vec3 {
+        Vec3 {
             x: self.x - other.x(),
             y: self.y - other.y(),
             z: self.z - other.z(),
@@ -93,11 +93,11 @@ impl Sub for Point {
     }
 }
 
-impl Neg for Point {
-    type Output = Point;
+impl Neg for Vec3 {
+    type Output = Vec3;
 
-    fn neg(self) -> Point {
-        Point {
+    fn neg(self) -> Vec3 {
+        Vec3 {
             x: -self.x,
             y: -self.y,
             z: -self.z,
@@ -105,11 +105,11 @@ impl Neg for Point {
     }
 }
 
-impl Mul<Point> for Point {
-    type Output = Point;
+impl Mul<Vec3> for Vec3 {
+    type Output = Vec3;
 
-    fn mul(self, other: Point) -> Point {
-        Point {
+    fn mul(self, other: Vec3) -> Vec3 {
+        Vec3 {
             x: self.x * other.x(),
             y: self.y * other.y(),
             z: self.z * other.z(),
@@ -117,11 +117,11 @@ impl Mul<Point> for Point {
     }
 }
 
-impl Mul<f64> for Point {
-    type Output = Point;
+impl Mul<f64> for Vec3 {
+    type Output = Vec3;
 
-    fn mul(self, scalar: f64) -> Point {
-        Point {
+    fn mul(self, scalar: f64) -> Vec3 {
+        Vec3 {
             x: self.x * scalar,
             y: self.y * scalar,
             z: self.z * scalar,
@@ -129,11 +129,11 @@ impl Mul<f64> for Point {
     }
 }
 
-impl Div<Point> for Point {
-    type Output = Point;
+impl Div<Vec3> for Vec3 {
+    type Output = Vec3;
 
-    fn div(self, other: Point) -> Point {
-        Point {
+    fn div(self, other: Vec3) -> Vec3 {
+        Vec3 {
             x: self.x / other.x(),
             y: self.y / other.y(),
             z: self.z / other.z(),
@@ -141,11 +141,11 @@ impl Div<Point> for Point {
     }
 }
 
-impl Div<f64> for Point {
-    type Output = Point;
+impl Div<f64> for Vec3 {
+    type Output = Vec3;
 
-    fn div(self, scalar: f64) -> Point {
-        Point {
+    fn div(self, scalar: f64) -> Vec3 {
+        Vec3 {
             x: self.x / scalar,
             y: self.y / scalar,
             z: self.z / scalar,
@@ -163,7 +163,7 @@ mod test {
         let x = 3.0;
         let y = 4.0;
         let z = 5.0;
-        let p = Point::new(x, y, z);
+        let p = Vec3::new(x, y, z);
 
         assert_eq!(p.x, x);
         assert_eq!(p.y, y);
@@ -172,7 +172,7 @@ mod test {
 
     #[test]
     fn  creates_random_point() {
-        let p = Point::new_random(-1.0, 1.0);
+        let p = Vec3::new_random(-1.0, 1.0);
         assert!(p.x() >= -1.0 && p.x() <= 1.0);
         assert!(p.y() >= -1.0 && p.y() <= 1.0);
         assert!(p.z() >= -1.0 && p.z() <= 1.0);
@@ -180,8 +180,8 @@ mod test {
 
     #[test]
     fn computes_dot_product() {
-        let p1: Point = Point::new(1.0, 2.0, 3.0);
-        let p2: Point = Point::new(3.0, 2.0, 1.0);
+        let p1: Vec3 = Vec3::new(1.0, 2.0, 3.0);
+        let p2: Vec3 = Vec3::new(3.0, 2.0, 1.0);
         let dot = p1.dot(&p2);
 
         assert_eq!(dot, 10.0);
@@ -189,9 +189,9 @@ mod test {
 
     #[test]
     fn computes_cross_product() {
-        let p1: Point = Point::new(1.0, 2.0, 3.0);
-        let p2: Point = Point::new(3.0, 2.0, 1.0);
-        let p3 = Point::new(-4.0, 8.0, -4.0);
+        let p1: Vec3 = Vec3::new(1.0, 2.0, 3.0);
+        let p2: Vec3 = Vec3::new(3.0, 2.0, 1.0);
+        let p3 = Vec3::new(-4.0, 8.0, -4.0);
         let cross = p1.cross(&p2);
 
         assert_eq!(p3.x(), cross.x());
@@ -201,19 +201,19 @@ mod test {
 
     #[test]
     fn computes_distance_to_origin() {
-        let p = Point{x:3.0, y:4.0, z:0.0};
+        let p = Vec3{x:3.0, y:4.0, z:0.0};
         let distance = p.distance_origin();
         assert_eq!(distance, 5.0);
     }
 
     #[test]
     fn computes_distance() {
-        let p1 = Point{x:3.0, y:4.0, z:0.0};
-        let p2 = Point{x:0.0, y:0.0, z:0.0};
+        let p1 = Vec3{x:3.0, y:4.0, z:0.0};
+        let p2 = Vec3{x:0.0, y:0.0, z:0.0};
         let distance12 = p1.distance(&p2);
         assert_eq!(distance12, 5.0);
-        let p11 = Point{x:4.0, y:5.0, z:1.0};
-        let p22 = Point{x:1.0, y:1.0, z:1.0};
+        let p11 = Vec3{x:4.0, y:5.0, z:1.0};
+        let p22 = Vec3{x:1.0, y:1.0, z:1.0};
         let distance1122 = p11.distance(&p22);
         assert_eq!(distance1122, 5.0);        
     }    

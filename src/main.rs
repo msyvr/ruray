@@ -6,7 +6,7 @@ use std::path::Path;
 use indicatif::{ProgressBar, ProgressStyle};
 use std::time;
 
-mod point;
+mod vec3;
 
 fn write_to_file(
     img_filename: &str,
