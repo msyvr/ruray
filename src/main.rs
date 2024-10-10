@@ -6,8 +6,8 @@ use std::path::Path;
 use indicatif::{ProgressBar, ProgressStyle};
 use std::time;
 
+mod point3;
 mod vec3;
-mod ray;
 
 fn write_to_file(
     img_filename: &str,
@@ -17,8 +17,7 @@ fn write_to_file(
 ) -> Result<(), std::io::Error> {
 
     // The docs indicate that webp isn't a valid format for
-    // image::save_buffer but using it produces a webp file
-    // so the docs seem to be out of date.
+    // image::save_buffer but using it produces a webp file? -vOv-
     let format_ok = match img_format {
         "webp"
         | "jpeg" 

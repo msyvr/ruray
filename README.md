@@ -41,4 +41,4 @@ Create an animation.
 - Consider running on a cloud provider's more powerful machine (with GPU acceleration).
 
 ### LICENSE
-Not having looked into licenses for a while, I did a quick search and found [this](https://www.reddit.com/r/opensource/comments/1b5oeq4/comment/kta5hwv/), which seemed to align with my intent - so Apache 2.0 it is. See the [LICENSE](https://github.com/msyvr/ruray/blob/main/LICENSE) file for details.
+Not having looked into licenses for a while, I did a quick search and found [this](https://www.reddit.com/r/opensource/comments/1b5oeq4/comment/kta5hwv/), which seemed to align with my intent - so Apache 2.0 it is. See the [LICENSE](https://github.com/msyvr/ruray?tab=License-1-ov-file) for details.
