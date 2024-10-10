@@ -7,6 +7,7 @@ use indicatif::{ProgressBar, ProgressStyle};
 use std::time;
 
 mod vec3;
+mod ray;
 
 fn write_to_file(
     img_filename: &str,

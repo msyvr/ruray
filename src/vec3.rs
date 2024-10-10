@@ -2,6 +2,8 @@ use rand::Rng;
 use std::f64;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 
+#[derive(Debug, Clone, Copy)]
+
 pub struct Vec3 {
     x: f64,
     y: f64,

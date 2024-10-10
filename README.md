@@ -1,12 +1,13 @@
 ## &#x1F386; a ray tracer written in rust &#x1F386;
 
 ### Usage
+Clone this (`msyvr/ruray`) repo, then:
 ```bash
 cargo run -- image-file-name-no-format
 ```
 
 ## Project objective
-Build a basic ray tracing engine to exercise my new Rust skills. Suggestions re making the code more idiomatic and performant are most welcome.
+Build a basic ray tracing engine to exercise my new Rust skills.
 
 #### Goal 0
 Write a slice of directly-computed pixels to an image format. No scene, just set up the render capability.
@@ -40,4 +41,4 @@ Create an animation.
 - Consider running on a cloud provider's more powerful machine (with GPU acceleration).
 
 ### LICENSE
-Not having looked into licenses for a while, I did a quick search and found [this](https://www.reddit.com/r/opensource/comments/1b5oeq4/comment/kta5hwv/), which seemed to align with my intent - so, as reflected in the LICENSE file, Apache 2.0 it is.
+Not having looked into licenses for a while, I did a quick search and found [this](https://www.reddit.com/r/opensource/comments/1b5oeq4/comment/kta5hwv/), which seemed to align with my intent - so Apache 2.0 it is. See the [LICENSE](https://github.com/msyvr/ruray/blob/main/LICENSE) file for details.
