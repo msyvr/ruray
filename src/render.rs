@@ -8,9 +8,9 @@ pub fn render(pixels: &mut [u8], display: (usize, usize)) {
     let pb = ProgressBar::new((display.1).try_into().unwrap());    
     pb.set_style(
         ProgressStyle::default_bar()
-        .template("[{bar:40.cyan/red}] {bytes}/{total_bytes} ({eta})")
+        .template("[{bar:40.cyan/cyan}] {bytes}/{total_bytes} ({eta})")
         .unwrap()
-        .progress_chars("~>/")
+        .progress_chars(":>~")
     );
 
     // Compute display pixel values based on scene 
@@ -32,7 +32,7 @@ pub fn render(pixels: &mut [u8], display: (usize, usize)) {
             pixels[index_red + 2] = (b * 255.9999) as u8;
         }
         if now.elapsed().unwrap() < Duration::from_millis(10) {
-            sleep(Duration::from_millis(10));
+            sleep(Duration::from_millis(20));
         }
         pb.set_position(row.try_into().unwrap());
     }
