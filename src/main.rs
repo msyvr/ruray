@@ -3,11 +3,11 @@ use std::io;
 use image;
 use std::fs::File;
 use std::path::Path;
-use indicatif::{ProgressBar, ProgressStyle};
 use std::time;
 
 mod point3;
 mod vec3;
+mod render;
 
 fn write_to_file(
     img_filename: &str,
@@ -88,35 +88,6 @@ mod test {
     }    
 }
 
-fn render(pixels: &mut [u8], display: (usize, usize)) {
-
-    let pb = ProgressBar::new((display.1).try_into().unwrap());    
-    pb.set_style(
-        ProgressStyle::default_bar()
-        .template("[{bar:40.cyan/blue}] {bytes}/{total_bytes} ({eta})")
-        .unwrap()
-        .progress_chars("#>-")
-    );
-
-    for row in 0..display.1 {
-        for col in 0..display.0 {
-            let r = (0.1 + ((col as f32) * 0.9 / (display.0 as f32 - 1.0))) as f32;
-            let g = 0.5;
-            let b = (0.1 + ((row as f32) * 0.9 / (display.1 as f32 - 1.0))) as f32;
-
-            // current pixel index: advance to row, advance to col (nb 3 vals per pixel)
-            let index_red = (( row * display.0 ) + col) * 3;
-
-            // TODO use palette crate or similar to avoid fudging the values with ~256 as f32
-            pixels[index_red] = (r * 255.9999) as u8;
-            pixels[index_red + 1] = (g * 255.9999) as u8;
-            pixels[index_red + 2] = (b * 255.9999) as u8;
-        }
-
-        pb.set_position(row.try_into().unwrap());
-    }
-}
-
 fn main() {
     println!("Let's trace some rays in Rust...\n");
 
@@ -134,18 +105,18 @@ fn main() {
     println!("path: {}", path);
 
     let format_default = "webp";
-
+    
     // Width as 'columns', height as 'rows'.
     let common = 50;
     let display_columns: usize = 4 * common * 3;
     let display_rows: usize = 3 * display_columns / 4;
     let display = (display_columns, display_rows);
     println!("display (cols, rows): {:?}", display);
-    
+
     let mut pixels = vec![0; 3 * display.0 * display.1];
     println!("Start render...");
     let now = time::SystemTime::now();    
-    render(&mut pixels, display); 
+    render::render(&mut pixels, display); 
     let elapsed = now.elapsed();
     println!("Render: {:?} milliseconds.", elapsed.unwrap().as_millis());     
 

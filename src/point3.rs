@@ -22,7 +22,6 @@ impl Point3 {
     }
 
     // New, at random coordinates within the world/scene.
-    
     pub fn new_random(world_min: f64, world_max: f64) -> Point3 {
         let mut rng = rand::thread_rng();
         Point3::new(
@@ -33,7 +32,6 @@ impl Point3 {
     }
 
     // Components along axes.
-
     pub fn x(&self) -> f64 {
         self.x
     }
@@ -47,7 +45,6 @@ impl Point3 {
     }
 
     // Ray approximation: ray === straight line between two points. 
-
     pub fn dot(&self, other: &Point3) -> f64 {
         (self.x * other.x) + (self.y * other.y) + (self.z * other.z)
     }
@@ -156,7 +153,6 @@ impl Div<f64> for Point3 {
 }
 
 #[cfg(test)]
-
 mod test {
     use super::*;
 

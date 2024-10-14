@@ -42,3 +42,17 @@ Create an animation.
 
 ### LICENSE
 Not having looked into licenses for a while, I did a quick search and found [this](https://www.reddit.com/r/opensource/comments/1b5oeq4/comment/kta5hwv/), which seemed to align with my intent - so Apache 2.0 it is. See the [LICENSE](https://github.com/msyvr/ruray?tab=License-1-ov-file) for details.
+
+---
+
+### Implementation details
+
+#### Camera
+Typically, a camera is represented as a point, at least initially.
+
+#### Viewport aka display plane
+Within the scene, this is where the scene image is formed. The final image will inherit the color values assigned to the display pixels.
+
+This plane is perpendicular to the -z axis in a RHC system where the x axis runs parallel to display rows, and the y axis runs parallel to display columns. Vu and Vv are established to 'traverse' rows and columns of the viewport display. 
+
+The distances between pixel centers are considered, so pixels have an area (i.e., they are not points). To illustrate: if the number of pixels is 16:9 and the display is at z = -1, ranging over x = [-8, 7], y = [4, 4], the pixel x and y dimensions are each 1, so the upper left pixel is at (-7.5, 3.5). Initially, the 'sensing' area of a pixel is considered to be at its center point. Averaging over rays passing through a sample of positions within the pixel deserves consideration for images with small numbers of pixels relative to the display dimensions.
